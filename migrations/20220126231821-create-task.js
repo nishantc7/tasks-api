@@ -19,11 +19,6 @@ module.exports = {
           key: 'id'
         }
       },
-      status : {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-        allowNull: false,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

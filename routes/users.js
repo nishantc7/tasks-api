@@ -19,4 +19,20 @@ router.get('/', async (req,res)=> {
     res.status(500).send('Server Error');
   }
 })
+//get users by companyId
+
+router.get('/company/:companyId', async (req,res)=> {
+  var companyId = req.params.companyId;
+  try{
+    const users = await user.findAll(
+      {where: {companyId : companyId}},
+      {include: [{model: company, as: 'company'}, {model: list, as: 'list', include: [{model: list_details, as: 'list_details'},{model: task, as: 'task'}]}]}
+      );
+    res.json(users);
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).send('Server Error');
+  }
+})
 module.exports = router;
