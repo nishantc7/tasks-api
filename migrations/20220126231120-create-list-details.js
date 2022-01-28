@@ -11,6 +11,14 @@ module.exports = {
       details: {
         type: Sequelize.STRING
       },
+      listId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {         // details belongs to list
+          model: 'lists',
+          key: 'id'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

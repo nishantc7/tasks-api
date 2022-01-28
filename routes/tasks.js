@@ -1,5 +1,5 @@
-var express = require('express');
-const { sequelize, task_data, task } = require('../models');
+var express = require("express");
+const { sequelize, task_data, task } = require("../models");
 var router = express.Router();
 
 /* GET users listing. */
@@ -9,121 +9,127 @@ var router = express.Router();
 
 //get all tasks
 
-router.get('/all', async (req,res)=> {
-  try{
-    const tasks = await task.findAll({include: [{model: task_data, as: 'task_data'}]});
-    res.json(tasks);
-  }
-  catch(err){
+router.get("/all", async (req, res) => {
+  try {
+    const tasks = await task.findAll({
+      include: [{ model: task_data, as: "task_data" }],
+    });
+    res.status(200).json(tasks);
+  } catch (err) {
     console.log(err);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
-})
+});
 
 //get tasks by by lists
 
-router.get('/list/:listId', async (req,res)=> {
+router.get("/list/:listId", async (req, res) => {
   var listId = req.params.listId;
-  try{
+  try {
     const tasks = await task.findAll({
       where: {
-        listId : listId,
+        listId: listId,
       },
-      include: [{model: task_data, as: 'task_data'}]
+      include: [{ model: task_data, as: "task_data" }],
     });
-    res.json(tasks);
-  }
-  catch(err){
+    res.status(200).json(tasks);
+  } catch (err) {
     console.log(err);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
-})
+});
 
-// get all incomplete tasks in list 
+// get all incomplete tasks in list
 
-router.get('/list/:listId/incomplete', async (req,res)=> {
+router.get("/list/:listId/incomplete", async (req, res) => {
   var listId = req.params.listId;
-  try{
+  try {
     const tasks = await task.findAll({
       where: {
-        listId : listId,
+        listId: listId,
       },
-      include: [{
-        model: task_data, as: 'task_data',
-        where: {
-          status: 0
-        }
-      }]
+      include: [
+        {
+          model: task_data,
+          as: "task_data",
+          where: {
+            status: 0,
+          },
+        },
+      ],
     });
-    res.json(tasks);
-  }
-  catch(err){
+    res.status(200).json(tasks);
+  } catch (err) {
     console.log(err);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
-})
+});
 
-// get all complete tasks in list 
+// get all complete tasks in list
 
-router.get('/list/:listId/complete', async (req,res)=> {
+router.get("/list/:listId/complete", async (req, res) => {
   var listId = req.params.listId;
-  try{
+  try {
     const tasks = await task.findAll({
       where: {
-        listId : listId,
+        listId: listId,
       },
-      include: [{
-        model: task_data, as: 'task_data',
-        where: {
-          status: 1
-        }
-      }]
+      include: [
+        {
+          model: task_data,
+          as: "task_data",
+          where: {
+            status: 1,
+          },
+        },
+      ],
     });
-    res.json(tasks);
-  }
-  catch(err){
+    res.status(200).json(tasks);
+  } catch (err) {
     console.log(err);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
-})
+});
 
 //get all uncompleted tasks
-router.get('/incomplete', async (req,res)=> {
-  try{
+router.get("/incomplete", async (req, res) => {
+  try {
     const tasks = await task.findAll({
-      
-      include: [{
-        model: task_data, as: 'task_data',
-        where: {
-          status: 0
-        }
-      }]
+      include: [
+        {
+          model: task_data,
+          as: "task_data",
+          where: {
+            status: 0,
+          },
+        },
+      ],
     });
-    res.json(tasks);
-  }
-  catch(err){
+    res.status(200).json(tasks);
+  } catch (err) {
     console.log(err);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
-})
+});
 
 // get all complete tasks
-router.get('/complete', async (req,res)=> {
-  try{
+router.get("/complete", async (req, res) => {
+  try {
     const tasks = await task.findAll({
-      
-      include: [{
-        model: task_data, as: 'task_data',
-        where: {
-          status: 1
-        }
-      }]
+      include: [
+        {
+          model: task_data,
+          as: "task_data",
+          where: {
+            status: 1,
+          },
+        },
+      ],
     });
-    res.json(tasks);
-  }
-  catch(err){
+    res.status(200).json(tasks);
+  } catch (err) {
     console.log(err);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
-})
+});
 module.exports = router;

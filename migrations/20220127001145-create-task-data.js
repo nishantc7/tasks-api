@@ -14,6 +14,14 @@ module.exports = {
       status: {
         type: Sequelize.BOOLEAN
       },
+      taskId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {         // details belongs to task
+          model: 'tasks',
+          key: 'id'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
