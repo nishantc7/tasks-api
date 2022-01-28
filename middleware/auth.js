@@ -21,10 +21,8 @@ module.exports = async (req, res, next) => {
         authUser.password
       );
       if (authenticated) {
-        console.log("authenticated!");
         req.user = authUser;
       } else {
-        console.log("not authenticated");
         message = `Authentication failure for username: ${credentials.name}`;
       }
     } else {
