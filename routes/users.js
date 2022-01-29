@@ -13,7 +13,7 @@ const authMiddleware = require("../middleware/auth");
 
 //add new user
 router.post("/", async (req, res) => {
-  //TODO: add validation, move to middleware
+  //TODO: add password validation
   try {
     if (
       !req.body.name ||
@@ -30,6 +30,12 @@ router.post("/", async (req, res) => {
       });
       if (authUser) {
         res.status(409).send("Username already exists");
+      } else if (req.body.password.length < 8) {
+        res.status(400).send("Password must be at least 8 characters long");
+      } else if (req.body.name === "") {
+        res.status(400).send("Name cannot be empty");
+      } else if (req.body.username.length < 6) {
+        res.status(400).send("Username must be at least 6 characters long");
       } else {
         const salt = await bycrypt.genSalt();
         const hashedPassword = await bycrypt.hash(req.body.password, salt);
