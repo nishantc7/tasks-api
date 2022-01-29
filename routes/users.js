@@ -11,6 +11,7 @@ var router = express.Router();
 const bycrypt = require("bcrypt");
 const authMiddleware = require("../middleware/auth");
 
+//add new user
 router.post("/", async (req, res) => {
   //TODO: add validation, move to middleware
   try {
@@ -22,16 +23,25 @@ router.post("/", async (req, res) => {
     ) {
       res.status(400).send("Bad Request");
     } else {
-      const salt = await bycrypt.genSalt();
-      const hashedPassword = await bycrypt.hash(req.body.password, salt);
-
-      const newUser = await user.create({
-        name: req.body.name,
-        username: req.body.username,
-        password: hashedPassword,
-        companyId: req.body.companyId,
+      const authUser = await user.findOne({
+        where: {
+          username: req.body.username,
+        },
       });
-      res.status(201).json(newUser);
+      if (authUser) {
+        res.status(409).send("Username already exists");
+      } else {
+        const salt = await bycrypt.genSalt();
+        const hashedPassword = await bycrypt.hash(req.body.password, salt);
+
+        const newUser = await user.create({
+          name: req.body.name,
+          username: req.body.username,
+          password: hashedPassword,
+          companyId: req.body.companyId,
+        });
+        res.status(201).json(newUser);
+      }
     }
   } catch (err) {
     console.log(err);
