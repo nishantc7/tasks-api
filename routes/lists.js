@@ -3,7 +3,24 @@ const { sequelize, list_details, list } = require("../models");
 var router = express.Router();
 const authMiddleware = require("../middleware/auth");
 
+router.get("/user", authMiddleware, async (req, res) => {
+  var userID = req.user.id;
+  try {
+    const lists = await list.findAll({
+      where: {
+        userID: userID,
+      },
+      include: [{ model: list_details, as: "list_details" }],
+    });
+    res.status(200).json(lists);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error");
+  }
+});
+
 //get lists by userID
+
 router.get("/:userId", async (req, res) => {
   var userID = req.params.userId;
   try {
@@ -22,7 +39,6 @@ router.get("/:userId", async (req, res) => {
 router
   .route("/")
   .get(authMiddleware, async (req, res) => {
-    console.log(req.user);
     try {
       const lists = await list.findAll({
         include: [{ model: list_details, as: "list_details" }],

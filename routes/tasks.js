@@ -1,13 +1,40 @@
 var express = require("express");
 const { sequelize, task_data, task } = require("../models");
+const authMiddleware = require("../middleware/auth");
+const tasksController = require("../controllers/tasks");
 var router = express.Router();
 
-/* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
-// });
+//get all tasks for authenticated user
+router
+  .route("/")
+  .get(authMiddleware, tasksController.getTasksForUser)
+  .post(authMiddleware, tasksController.createTask);
+
+router.get(
+  "/incomplete",
+  authMiddleware,
+  tasksController.getIncompleteTasksForUser
+);
+
+router.get(
+  "/complete",
+  authMiddleware,
+  tasksController.getCompleteTasksForUser
+);
+//get for particular user
+router.get("/:userId", authMiddleware, tasksController.getTasksByUserId);
 
 //get all tasks
+router.get(
+  "/:userId/complete",
+  authMiddleware,
+  tasksController.getCompleteTasksByUserId
+);
+router.get(
+  "/:userId/incomplete",
+  authMiddleware,
+  tasksController.getInompleteTasksByUserId
+);
 
 router.get("/all", async (req, res) => {
   try {
@@ -92,7 +119,7 @@ router.get("/list/:listId/complete", async (req, res) => {
 });
 
 //get all uncompleted tasks
-router.get("/incomplete", async (req, res) => {
+router.get("/allincomplete", async (req, res) => {
   try {
     const tasks = await task.findAll({
       include: [
@@ -113,7 +140,7 @@ router.get("/incomplete", async (req, res) => {
 });
 
 // get all complete tasks
-router.get("/complete", async (req, res) => {
+router.get("/allcomplete", async (req, res) => {
   try {
     const tasks = await task.findAll({
       include: [
@@ -132,4 +159,5 @@ router.get("/complete", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
 module.exports = router;

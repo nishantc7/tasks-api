@@ -14,8 +14,8 @@ async function main() {
   await sequelize.authenticate();
   // console.log("Starting server...");
 
-  //   sequelize.sync({alter:true, drop: true});
-  //   sequelize.sync({ force: true });
+  // sequelize.sync({ alter: true, drop: true });
+  // sequelize.sync({ force: true });
 }
 main();
 // console.log("this is executed before sequelize");
